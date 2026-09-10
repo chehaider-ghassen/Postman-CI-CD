@@ -1,0 +1,40 @@
+name: API Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Start json-server
+        run: npx json-server --watch db.json --port 3000 &
+
+      - name: Wait for json-server to be ready
+        run: npx wait-on http://localhost:3000/books --timeout 30000
+
+      - name: Run Postman collection with Newman
+        run: npx newman run postman/Library_Management.postman_collection.json -e postman/Library_Management.postman_environment.json --env-var base_url=http://localhost:3000 --reporters cli,junit --reporter-junit-export newman/report.xml
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-report
+          path: newman/report.xml

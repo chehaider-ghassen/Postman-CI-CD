@@ -1,0 +1,1767 @@
+{
+  "info": {
+    "_postman_id": "d9fd9e21-3d9c-423b-a53e-310cac533539",
+    "name": "Library Management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56196704",
+    "_collection_link": "https://go.postman.co/collection/56196704-d9fd9e21-3d9c-423b-a53e-310cac533539?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Positive Tests",
+          "item": [
+            {
+              "name": "Login API with token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let jsonData = pm.response.json();\r",
+                      "pm.environment.set(\"Token\", jsonData.accessToken);\r",
+                      "\r",
+                      "console.log(pm.environment.get(\"Token\"));"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"emilys\",\r\n    \"password\": \"emilyspass\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "https://dummyjson.com/auth/login",
+                  "protocol": "https",
+                  "host": [
+                    "dummyjson",
+                    "com"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get all users",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"La réponse est un tableau\", function () {\r",
+                      "    pm.expect(response).to.be.an('array');\r",
+                      "});\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"Le tableau contient au moins un utilisateur\", function () {\r",
+                      "    pm.expect(response).to.have.length.at.least(1);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Chaque utilisateur possède les propriétés attendues\", function () {\r",
+                      "    response.forEach(function (user) {\r",
+                      "\r",
+                      "        pm.expect(user).to.have.property('id');\r",
+                      "        pm.expect(user).to.have.property('username');\r",
+                      "        pm.expect(user).to.have.property('email');\r",
+                      "        pm.expect(user).to.have.property('password');\r",
+                      "        pm.expect(user).to.have.property('role');\r",
+                      "        pm.expect(user).to.have.property('active');\r",
+                      "    \r",
+                      "    });\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Chaque utilisateur possède un email et un mot de passe non vides\", function () {\r",
+                      "\r",
+                      "    response.forEach(function(user) {\r",
+                      "\r",
+                      "        pm.expect(user.email).to.be.a(\"string\").and.to.not.be.empty;\r",
+                      "        pm.expect(user.password).to.be.a(\"string\").and.to.not.be.empty;\r",
+                      "        pm.expect(user.role).to.be.a(\"string\").and.to.not.be.empty;\r",
+                      "\r",
+                      "    });\r",
+                      "\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Le tableau contient au moins un utilisateur avec le rôle 'admin'\", function () {\r",
+                      "\r",
+                      "    let hasAdmin = response.some(function(user) {\r",
+                      "        return user.role === \"admin\";\r",
+                      "    });\r",
+                      "\r",
+                      "    pm.expect(hasAdmin).to.be.true;\r",
+                      "\r",
+                      "});\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get user by ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let user = pm.response.json();\r",
+                      "\r",
+                      "let userId = Number(pm.environment.get(\"userID\"));\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"Status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"L'ID de l'utilisateur est égal à la variable userId\", function () {\r",
+                      "    pm.expect(user).to.be.an('object');\r",
+                      "    pm.expect(user.id).to.eql(userId);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"L'utilisateur est actif\", function () {\r",
+                      "    pm.expect(user.active).to.be.true;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"L'utilisateur a le rôle d'admin\", function () {\r",
+                      "    pm.expect(user.role).to.equal(\"admin\");\r",
+                      "});\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/users/{{userID}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{userID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create user",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status code is 201\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Tous les champs obligatoires de l'utilisateur ne sont pas vides\", function () {\r",
+                      "\r",
+                      "    pm.expect(response.username).to.be.a(\"string\").and.to.not.be.empty;\r",
+                      "    pm.expect(response.email).to.be.a(\"string\").and.to.not.be.empty;\r",
+                      "    pm.expect(response.password).to.be.a(\"string\").and.to.not.be.empty;\r",
+                      "    pm.expect(response.role).to.be.a(\"string\").and.to.not.be.empty;\r",
+                      "\r",
+                      "    pm.expect(response.active).to.not.be.undefined;\r",
+                      "    pm.expect(response.id).to.not.be.undefined;\r",
+                      "\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Le rôle de l'utilisateur est 'admin' ou 'user'\", function () {\r",
+                      "    pm.expect(response.role).to.be.oneOf([\"admin\", \"user\"]);\r",
+                      "\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"l'utilisateur est actif ou non'\", function () {\r",
+                      "    pm.expect(response.active).to.be.oneOf([true, false]);\r",
+                      "\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"L'utilisateur possède uniquement les propriétés attendues\", function () {\r",
+                      "\r",
+                      "    const expectedProperties = [\r",
+                      "        \"id\",\r",
+                      "        \"username\",\r",
+                      "        \"email\",\r",
+                      "        \"password\",\r",
+                      "        \"role\",\r",
+                      "        \"active\"\r",
+                      "    ];\r",
+                      "\r",
+                      "    pm.expect(Object.keys(response)).to.have.members(expectedProperties);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"BUG : L'API ne devrait pas accepter un body vide\", function () {\r",
+                      "    pm.expect(pm.response.code).to.equal(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"BUG : l'email créé devrait avoir un format valide\", function () {\r",
+                      "\r",
+                      "    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\r",
+                      "\r",
+                      "    pm.expect(response.email).to.match(emailRegex);\r",
+                      "\r",
+                      "});\r",
+                      "\r",
+                      "\r",
+                      "// Au moins 8 caractères\r",
+                      "// Au moins une majuscule\r",
+                      "// Au moins une minuscule\r",
+                      "// Au moins un chiffre\r",
+                      "// Au moins un caractère spécial (@, #, !, $, %, etc.)\r",
+                      "\r",
+                      "const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&.#_-])[A-Za-z\\d@$!%*?&.#_-]{8,}$/;\r",
+                      "\r",
+                      "pm.test(\"Le mot de passe respecte les règles de sécurité\", function () {\r",
+                      "    pm.expect(response.password).to.match(passwordRegex);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"La création avec un ID déjà existant doit être refusée\", function () {\r",
+                      "    pm.expect(pm.response.code).to.equal(500);\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "let userID = 13;\r",
+                      "let username = \"Ghassen\";\r",
+                      "//let email = \"ghassen@gmail.com\";\r",
+                      "//amelioration\r",
+                      "let email = Date.now() + \"@test.com\";\r",
+                      "let password = \"Password123!\";\r",
+                      "//let role = \"user\";\r",
+                      "//amelioration\r",
+                      "let role= Math.random() > 0.5 ? \"admin\" : \"user\";\r",
+                      "let active = true;\r",
+                      "\r",
+                      "pm.environment.set(\"newUserID\", userID);\r",
+                      "pm.environment.set(\"newUserUsername\", username);\r",
+                      "pm.environment.set(\"newUserEmail\", email);\r",
+                      "pm.environment.set(\"newUserPassword\", password);\r",
+                      "pm.environment.set(\"newUserRole\", role);\r",
+                      "pm.environment.set(\"newUserActive\", active);"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id\": {{newUserID}},\r\n    \"username\": \"{{newUserUsername}}\",\r\n    \"email\": \"{{newUserEmail}}\",\r\n    \"password\": \"{{newUserPassword}}\",\r\n    \"role\": \"{{newUserRole}}\",\r\n    \"active\": {{newUserActive}}\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Negative Tests",
+          "item": [
+            {
+              "name": "Duplicate ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.text();\r",
+                      "\r",
+                      "pm.test(\"Le serveur retourne un code 500\", function () {\r",
+                      "    pm.response.to.have.status(500);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Le message indique un ID dupliqué\", function () {\r",
+                      "    pm.expect(response).to.include(\"duplicate id\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"john\",\r\n    \"email\": \"john@test.com\",\r\n    \"password\": \"Password@123\",\r\n    \"role\": \"user\",\r\n    \"active\": true,\r\n    \"id\": 10\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Missing Email",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "let userID = 12;\r",
+                      "let username = \"Ghassen\";\r",
+                      "let password = \"Password123!\";\r",
+                      "let role = \"user\";\r",
+                      "let active = true;\r",
+                      "\r",
+                      "pm.environment.set(\"newUserID\", userID);\r",
+                      "pm.environment.set(\"newUserUsername\", username);\r",
+                      "pm.environment.set(\"newUserPassword\", password);\r",
+                      "pm.environment.set(\"newUserRole\", role);\r",
+                      "pm.environment.set(\"newUserActive\", active);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"L'email est une chaîne non vide\", function () {\r",
+                      "   \r",
+                      "    pm.expect(response).to.have.property(\"email\");\r",
+                      "    pm.expect(response.email).to.be.a(\"string\");\r",
+                      "    pm.expect(response.email).to.not.be.empty;\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id\": {{newUserID}},\r\n    \"username\": \"{{newUserUsername}}\",\r\n    \"password\": \"{{newUserPassword}}\",\r\n    \"role\": \"{{newUserRole}}\",\r\n    \"active\": {{newUserActive}}\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalid Email",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "let userID = 12;\r",
+                      "let username = \"Ghassen\";\r",
+                      "let email = \"ghassen.com\";\r",
+                      "let password = \"Password123!\";\r",
+                      "let role = \"user\";\r",
+                      "let active = true;\r",
+                      "\r",
+                      "pm.environment.set(\"newUserID\", userID);\r",
+                      "pm.environment.set(\"newUserUsername\", username);\r",
+                      "pm.environment.set(\"newUserEmail\", email);\r",
+                      "pm.environment.set(\"newUserPassword\", password);\r",
+                      "pm.environment.set(\"newUserRole\", role);\r",
+                      "pm.environment.set(\"newUserActive\", active);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"BUG : l'email créé devrait avoir un format valide\", function () {\r",
+                      "\r",
+                      "    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\r",
+                      "\r",
+                      "    pm.expect(response.email).to.match(emailRegex);\r",
+                      "\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"L'email' n'est pas vide\", function () {\r",
+                      "\r",
+                      "    pm.expect(response.email.trim()).to.not.equal(\"\");\r",
+                      "\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id\": {{newUserID}},\r\n    \"username\": \"{{newUserUsername}}\",\r\n    \"email\": \"{{newUserEmail}}\",\r\n    \"password\": \"{{newUserPassword}}\",\r\n    \"role\": \"{{newUserRole}}\",\r\n    \"active\": {{newUserActive}}\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Missing password",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "let userID = 12;\r",
+                      "let username = \"Ghassen\";\r",
+                      "let email = \"ghassen.com\";\r",
+                      "let role = \"user\";\r",
+                      "let active = true;\r",
+                      "\r",
+                      "pm.environment.set(\"newUserID\", userID);\r",
+                      "pm.environment.set(\"newUserUsername\", username);\r",
+                      "pm.environment.set(\"newUserEmail\", email);\r",
+                      "pm.environment.set(\"newUserRole\", role);\r",
+                      "pm.environment.set(\"newUserActive\", active);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"Le password est une chaîne non vide\", function () {\r",
+                      "   \r",
+                      "    pm.expect(response).to.have.property(\"password\");\r",
+                      "    pm.expect(response.email).to.be.a(\"string\");\r",
+                      "    pm.expect(response.email).to.not.be.empty;\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id\": {{newUserID}},\r\n    \"username\": \"{{newUserUsername}}\",\r\n    \"email\": \"{{newUserEmail}}\",\r\n    \"role\": \"{{newUserRole}}\",\r\n    \"active\": {{newUserActive}}\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalid password",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "let userID = 12;\r",
+                      "let username = \"Ghassen\";\r",
+                      "let email = \"ghassen.com\";\r",
+                      "let password = \"Passw\";\r",
+                      "let role = \"user\";\r",
+                      "let active = true;\r",
+                      "\r",
+                      "pm.environment.set(\"newUserID\", userID);\r",
+                      "pm.environment.set(\"newUserUsername\", username);\r",
+                      "pm.environment.set(\"newUserEmail\", email);\r",
+                      "pm.environment.set(\"newUserPassword\", password);\r",
+                      "pm.environment.set(\"newUserRole\", role);\r",
+                      "pm.environment.set(\"newUserActive\", active);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "// Au moins 8 caractères\r",
+                      "// Au moins une majuscule\r",
+                      "// Au moins une minuscule\r",
+                      "// Au moins un chiffre\r",
+                      "// Au moins un caractère spécial (@, #, !, $, %, etc.)\r",
+                      "\r",
+                      "const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&.#_-])[A-Za-z\\d@$!%*?&.#_-]{8,}$/;\r",
+                      "\r",
+                      "pm.test(\"Le mot de passe respecte les règles de sécurité\", function () {\r",
+                      "    pm.expect(response.password).to.match(passwordRegex);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Le password n'est pas vide\", function () {\r",
+                      "\r",
+                      "    pm.expect(response.password.trim()).to.not.equal(\"\");\r",
+                      "\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id\": {{newUserID}},\r\n    \"username\": \"{{newUserUsername}}\",\r\n    \"email\": \"{{newUserEmail}}\",\r\n    \"password\": \"{{newUserPassword}}\",\r\n    \"role\": \"{{newUserRole}}\",\r\n    \"active\": {{newUserActive}}\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalid username",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "let userID = 12;\r",
+                      "let username = \"\";\r",
+                      "let email = \"ghassen.com\";\r",
+                      "let password = \"Password123!\";\r",
+                      "let role = \"user\";\r",
+                      "let active = true;\r",
+                      "\r",
+                      "pm.environment.set(\"newUserID\", userID);\r",
+                      "pm.environment.set(\"newUserUsername\", username);\r",
+                      "pm.environment.set(\"newUserEmail\", email);\r",
+                      "pm.environment.set(\"newUserPassword\", password);\r",
+                      "pm.environment.set(\"newUserRole\", role);\r",
+                      "pm.environment.set(\"newUserActive\", active);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"L'email est une chaîne non vide\", function () {\r",
+                      "   \r",
+                      "    pm.expect(response).to.have.property(\"username\");\r",
+                      "    pm.expect(response.email).to.be.a(\"string\");\r",
+                      "    pm.expect(response.email).to.not.be.empty;\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id\": {{newUserID}},\r\n    \"username\": \"{{newUserUsername}}\",\r\n    \"email\": \"{{newUserEmail}}\",\r\n    \"password\": \"{{newUserPassword}}\",\r\n    \"role\": \"{{newUserRole}}\",\r\n    \"active\": {{newUserActive}}\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalid role",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "let userID = 12;\r",
+                      "let username = \"\";\r",
+                      "let email = \"ghassen.com\";\r",
+                      "let password = \"Password123!\";\r",
+                      "let role = \"\";\r",
+                      "let active = true;\r",
+                      "\r",
+                      "pm.environment.set(\"newUserID\", userID);\r",
+                      "pm.environment.set(\"newUserUsername\", username);\r",
+                      "pm.environment.set(\"newUserEmail\", email);\r",
+                      "pm.environment.set(\"newUserPassword\", password);\r",
+                      "pm.environment.set(\"newUserRole\", role);\r",
+                      "pm.environment.set(\"newUserActive\", active);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Le rôle de l'utilisateur est 'admin' ou 'user'\", function () {\r",
+                      "    pm.expect(response.role).to.be.oneOf([\"admin\", \"user\"]);\r",
+                      "\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Le role n'est pas vide\", function () {\r",
+                      "\r",
+                      "    pm.expect(response.role.trim()).to.not.equal(\"\");\r",
+                      "\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id\": {{newUserID}},\r\n    \"username\": \"{{newUserUsername}}\",\r\n    \"email\": \"{{newUserEmail}}\",\r\n    \"password\": \"{{newUserPassword}}\",\r\n    \"role\": \"{{newUserRole}}\",\r\n    \"active\": {{newUserActive}}\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalid status",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "let userID = 12;\r",
+                      "let username = \"ghassen\";\r",
+                      "let email = \"ghassen.com\";\r",
+                      "let password = \"Password123!\";\r",
+                      "let role = \"user\";\r",
+                      "let active = false;\r",
+                      "\r",
+                      "pm.environment.set(\"newUserID\", userID);\r",
+                      "pm.environment.set(\"newUserUsername\", username);\r",
+                      "pm.environment.set(\"newUserEmail\", email);\r",
+                      "pm.environment.set(\"newUserPassword\", password);\r",
+                      "pm.environment.set(\"newUserRole\", role);\r",
+                      "pm.environment.set(\"newUserActive\", active);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"l'utilisateur est actif ou non\", function () {\r",
+                      "    pm.expect(response.active).to.be.oneOf([true, false]);\r",
+                      "\r",
+                      "});\r",
+                      "pm.test(\"Le status n'est pas vide\", function () {\r",
+                      "\r",
+                      "    pm.expect(response.status.trim()).to.not.equal(\"\");\r",
+                      "\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id\": {{newUserID}},\r\n    \"username\": \"{{newUserUsername}}\",\r\n    \"email\": \"{{newUserEmail}}\",\r\n    \"password\": \"{{newUserPassword}}\",\r\n    \"role\": \"{{newUserRole}}\",\r\n    \"active\": {{newUserActive}}\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update a book",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status code est 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Le titre a été mis à jour\", function () {\r",
+                      "    pm.expect(response.title).to.eql(\"The lord of the rings\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"L'auteur a été mis à jour\", function () {\r",
+                      "    pm.expect(response.author).to.eql(\"chehaider ghassen\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Le prix a été mis à jour\", function () {\r",
+                      "    pm.expect(response.price).to.eql(150);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Le statut disponible est correct\", function () {\r",
+                      "    pm.expect(response.available).to.be.true;\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id\": 1,\r\n    \"title\": \"The lord of the rings\",\r\n    \"author\": \"chehaider ghassen\",\r\n    \"price\": 150,\r\n    \"available\": true\r\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/books/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "books",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "ID inexistant",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Le livre n'existe pas\", function () {\r",
+                      "    pm.response.to.have.status(404);\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id\": 1,\r\n    \"title\": \"The lord of the rings\",\r\n    \"author\": \"chehaider ghassen\",\r\n    \"price\": 150,\r\n    \"available\": true\r\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/books/999",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "books",
+                    "999"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Books",
+      "item": [
+        {
+          "name": "Get all books",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"La réponse est un tableau\", function () {\r",
+                  "    pm.expect(response).to.be.an('array');\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Le tableau contient au moins un livre\", function () {\r",
+                  "    pm.expect(response).to.have.length.at.least(1);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Chaque livre possède les propriétés attendues\", function () {\r",
+                  "\r",
+                  "    response.forEach(function (book) {\r",
+                  "\r",
+                  "        pm.expect(book).to.have.property(\"id\");\r",
+                  "        pm.expect(book).to.have.property(\"title\");\r",
+                  "        pm.expect(book).to.have.property(\"author\");\r",
+                  "        pm.expect(book).to.have.property(\"price\");\r",
+                  "        pm.expect(book).to.have.property(\"available\");\r",
+                  "\r",
+                  "    });\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Les types des propriétés sont corrects\", function () {\r",
+                  "\r",
+                  "    response.forEach(function (book) {\r",
+                  "\r",
+                  "        pm.expect(book.id).to.be.a(\"number\");\r",
+                  "        pm.expect(book.title).to.be.a(\"string\");\r",
+                  "        pm.expect(book.author).to.be.a(\"string\");\r",
+                  "        pm.expect(book.price).to.be.a(\"number\");\r",
+                  "        pm.expect(book.available).to.be.a(\"boolean\");\r",
+                  "\r",
+                  "    });\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Le titre n'est pas vide\", function () {\r",
+                  "\r",
+                  "    response.forEach(function (book) {\r",
+                  "\r",
+                  "        pm.expect(book.title.trim()).to.not.equal(\"\");\r",
+                  "\r",
+                  "    });\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"L'auteur n'est pas vide\", function () {\r",
+                  "\r",
+                  "    response.forEach(function(book){\r",
+                  "\r",
+                  "        pm.expect(book.author.trim()).to.not.equal(\"\");\r",
+                  "\r",
+                  "    });\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Le prix est positif\", function () {\r",
+                  "\r",
+                  "    response.forEach(function(book){\r",
+                  "\r",
+                  "        pm.expect(book.price).to.be.above(0);\r",
+                  "\r",
+                  "    });\r",
+                  "\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "books"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get book by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let book = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"La réponse est un objet\", function () {\r",
+                  "    pm.expect(book).to.be.an(\"object\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Le livre possède les propriétés attendues\", function () {\r",
+                  "    pm.expect(book).to.have.property(\"id\");\r",
+                  "    pm.expect(book).to.have.property(\"title\");\r",
+                  "    pm.expect(book).to.have.property(\"author\");\r",
+                  "    pm.expect(book).to.have.property(\"price\");\r",
+                  "    pm.expect(book).to.have.property(\"available\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"L'ID correspond à la variable bookId\", function () {\r",
+                  "    let expectedId = Number(pm.environment.get(\"bookID\"));\r",
+                  "    pm.expect(book.id).to.equal(expectedId);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Le titre est une chaîne non vide\", function () {\r",
+                  "    pm.expect(book.title).to.be.a(\"string\");\r",
+                  "    pm.expect(book.title.trim()).to.not.equal(\"\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Le prix est positif\", function () {\r",
+                  "    pm.expect(book.price).to.be.a(\"number\");\r",
+                  "    pm.expect(book.price).to.be.above(0);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books/{{bookID}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "books",
+                "{{bookID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create book",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "let bookID = 4;\r",
+                  "let booktitle = \"The lord of the rings\";\r",
+                  "let bookauthor = \"chehaider ghassen\";\r",
+                  "let bookprice = 150;\r",
+                  "let bookavailable = Math.random() > 0.5 ? false : true;\r",
+                  "\r",
+                  "pm.environment.set(\"newBookID\", bookID);\r",
+                  "pm.environment.set(\"newBookTilte\", booktitle);\r",
+                  "pm.environment.set(\"newBookAuthor\", bookauthor);\r",
+                  "pm.environment.set(\"newBookPrice\", bookprice);\r",
+                  "pm.environment.set(\"newBookAvailable\", bookavailable);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code is 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Tous les champs obligatoires du livre ne sont pas vides\", function () {\r",
+                  "\r",
+                  "    pm.expect(response.id).to.be.above(0);\r",
+                  "    pm.expect(response.title).to.be.a(\"string\").and.to.not.be.empty;\r",
+                  "    pm.expect(response.author).to.be.a(\"string\").and.to.not.be.empty;\r",
+                  "    pm.expect(response.price).to.be.above(0);\r",
+                  "    pm.expect(response.available).to.be.a(\"boolean\");\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Le livre possède uniquement les propriétés attendues\", function () {\r",
+                  "\r",
+                  "    const expectedProperties = [\r",
+                  "        \"id\",\r",
+                  "        \"title\",\r",
+                  "        \"author\",\r",
+                  "        \"price\",\r",
+                  "        \"available\",\r",
+                  "    ];\r",
+                  "\r",
+                  "    pm.expect(Object.keys(response)).to.have.members(expectedProperties);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": {{newBookID}},\r\n    \"title\": \"{{newBookTilte}}\",\r\n    \"author\": \"{{newBookAuthor}}\",\r\n    \"price\": {{newBookPrice}},\r\n    \"available\": {{newBookAvailable}}\r\n    \r\n}\r\n\r\n"
+            },
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "books"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get book by limit",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let books = pm.response.json();\r",
+                  "\r",
+                  "//La méthode map() parcourt chaque élément du tableau.\r",
+                  "//Pour chaque élément, elle exécute la fonction product => product.id C'est équivalent à écrire\r",
+                  "//  function(product) {\r",
+                  " //   return product.id;\r",
+                  " //   \r",
+                  "//Un Set est une structure de données JavaScript qui ne conserve que les valeurs uniques.\r",
+                  "//\r",
+                  "//\r",
+                  "pm.test(\"Tous les IDs sont uniques\", function () {\r",
+                  "\r",
+                  "    let ids = books.map(book => book.id);\r",
+                  "\r",
+                  "    let uniqueIds = new Set(ids);\r",
+                  "\r",
+                  "    pm.expect(uniqueIds.size).to.eql(ids.length);\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "//La fonction JavaScript isFinite() vérifie si la valeur est un nombre fini\r",
+                  "//true si la valeur est un nombre valide.\r",
+                  "//false si ce n'est pas un nombre ou si la valeur est infinie (Infinity, -Infinity) ou NaN\r",
+                  "pm.test(\"les prix sont valides (nombre fini et positif)\", function () {\r",
+                  "    books.forEach(function (book) {\r",
+                  "        pm.expect(book.price).to.be.a('number');\r",
+                  "        pm.expect(book.price).to.be.above(0);\r",
+                  "        pm.expect(isFinite(book.price)).to.be.true;\r",
+                  "        \r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "//catégories autorisées: \"electronics\", \"jewelery\",\"men's clothing\",\"women's clothing\"\r",
+                  "// pm.test(\"La catégorie fait partie des catégories autorisées\", function () {\r",
+                  "//     pm.expect(book.category).to.be.oneOf([\"electronics\", \"jewelery\",\"men's clothing\",\"women's clothing\"]);\r",
+                  "// });\r",
+                  "\r",
+                  "// pm.test(\"La note (rating.rate) est comprise entre 0 et 5\", function () {\r",
+                  "//     pm.expect(product.rating.rate).to.be.at.least(0).and.to.be.at.most(5);\r",
+                  "// });\r",
+                  "\r",
+                  "// pm.test(\"Le nombre d'avis (rating.count) est supérieur ou égal à 0\", function () {\r",
+                  "//     pm.expect(product.rating.count).to.be.at.least(0);\r",
+                  "// });\r",
+                  "\r",
+                  "// //Vérifier que l'image est une chaîne et commence par https://\r",
+                  "// pm.test(\"L'image est une URL HTTPS valide\", function () {\r",
+                  "//     pm.expect(product.image).to.be.a(\"string\");\r",
+                  "//     pm.expect(product.image).to.match(/^https:\\/\\//);\r",
+                  "// });\r",
+                  "\r",
+                  "// //Ou plus simplemen\r",
+                  "// pm.test(\"L'image commence par https://\", function () {\r",
+                  "//     pm.expect(product.image.startsWith(\"https://\")).to.be.true;\r",
+                  "// });\r",
+                  "\r",
+                  "pm.test(\"La valeur de limit est 4\", function () {\r",
+                  "    pm.expect(books.length).to.equal(4);\r",
+                  "});\r",
+                  "\r",
+                  "// pm.test(\"La valeur de skip est 0\", function () {\r",
+                  "//     pm.expect(books.skip).to.equal(0);\r",
+                  "// });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": {{newBookID}},\r\n    \"title\": \"{{newBookTilte}}\",\r\n    \"author\": \"{{newBookAuthor}}\",\r\n    \"price\": {{newBookPrice}},\r\n    \"available\": {{newBookAvailable}}\r\n    \r\n}\r\n\r\n"
+            },
+            "url": {
+              "raw": "{{base_url}}/books?limit=5&skip=0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "books"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                },
+                {
+                  "key": "skip",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get book by word",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let books = pm.response.json();\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Le mot 'lord' apparaît dans le titre\", function () {\r",
+                  "\r",
+                  "    let keyword = \"lord\";\r",
+                  "\r",
+                  "    books.forEach(function(book){\r",
+                  "\r",
+                  "        let found =\r",
+                  "            book.title.toLowerCase().includes(keyword);\r",
+                  "\r",
+                  "        pm.expect(found).to.be.true;\r",
+                  "\r",
+                  "    });\r",
+                  "\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": {{newBookID}},\r\n    \"title\": \"{{newBookTilte}}\",\r\n    \"author\": \"{{newBookAuthor}}\",\r\n    \"price\": {{newBookPrice}},\r\n    \"available\": {{newBookAvailable}}\r\n    \r\n}\r\n\r\n"
+            },
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "books"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Borrow",
+      "item": [
+        {
+          "name": "Get all borrows",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let borrows = pm.response.json();\r",
+                  "\r",
+                  "\r",
+                  "//test d'intégrité référentielle : vérifier que chaque userId d'un emprunt correspond bien à un utilisateur existant.\r",
+                  "pm.sendRequest(\"http://localhost:3000/users\", function (err, res) {\r",
+                  "\r",
+                  "    pm.test(\"La requête GET /users est réussie\", function () {\r",
+                  "        pm.expect(err).to.equal(null);\r",
+                  "        pm.expect(res.code).to.equal(200);\r",
+                  "    });\r",
+                  "\r",
+                  "    let users = res.json();\r",
+                  "\r",
+                  "    // Liste des IDs utilisateurs\r",
+                  "    let userIds = users.map(user => user.id);\r",
+                  "\r",
+                  "    pm.test(\"Chaque emprunt référence un utilisateur existant\", function () {\r",
+                  "\r",
+                  "        borrows.forEach(function (borrow) {\r",
+                  "\r",
+                  "            pm.expect(\r",
+                  "                userIds,\r",
+                  "                `Utilisateur ${borrow.userId} introuvable`\r",
+                  "            ).to.include(borrow.userId);\r",
+                  "\r",
+                  "        });\r",
+                  "\r",
+                  "    });\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "//test d'intégrité référentielle : vérifier que chaque bookId d'un emprunt correspond bien à un livre existant.\r",
+                  "pm.sendRequest(\"http://localhost:3000/books\", function (err, res) {\r",
+                  "\r",
+                  "    let books = res.json();\r",
+                  "    let bookIds = books.map(book => book.id);\r",
+                  "\r",
+                  "    pm.test(\"Chaque emprunt référence un livre existant\", function () {\r",
+                  "\r",
+                  "        borrows.forEach(function (borrow) {\r",
+                  "\r",
+                  "            pm.expect(\r",
+                  "                bookIds,\r",
+                  "                `Livre ${borrow.bookId} introuvable`\r",
+                  "            ).to.include(borrow.bookId);\r",
+                  "\r",
+                  "        });\r",
+                  "\r",
+                  "    });\r",
+                  "\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/borrows",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "borrows"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create borrow",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let borrow = pm.response.json();\r",
+                  "\r",
+                  "//Le serveur crée l'emprunt et met automatiquement le livre à available = false\r",
+                  "pm.sendRequest({\r",
+                  "    url: \"http://localhost:3000/books/\" + borrow.bookId,\r",
+                  "    method: \"PATCH\",\r",
+                  "    header: {\r",
+                  "        \"Content-Type\": \"application/json\"\r",
+                  "    },\r",
+                  "    body: {\r",
+                  "        mode: \"raw\",\r",
+                  "        raw: JSON.stringify({\r",
+                  "            available: false\r",
+                  "        })\r",
+                  "    }\r",
+                  "}, function (err, res) {\r",
+                  "\r",
+                  "    pm.test(\"Le livre est marqué comme indisponible\", function () {\r",
+                  "        pm.expect(err).to.equal(null);\r",
+                  "        pm.expect(res.code).to.equal(200);\r",
+                  "\r",
+                  "        let book = res.json();\r",
+                  "        pm.expect(book.available).to.be.false;\r",
+                  "    });\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "//test d'intégrité référentielle : vérifier que chaque userId d'un emprunt correspond bien à un utilisateur existant.\r",
+                  "pm.sendRequest(\"http://localhost:3000/users\", function (err, res) {\r",
+                  "\r",
+                  "    pm.test(\"La requête GET /users est réussie\", function () {\r",
+                  "        pm.expect(err).to.equal(null);\r",
+                  "        pm.expect(res.code).to.equal(200);\r",
+                  "    });\r",
+                  "\r",
+                  "    let users = res.json();\r",
+                  "\r",
+                  "    // Liste des IDs utilisateurs\r",
+                  "    let userIds = users.map(user => user.id);\r",
+                  "\r",
+                  "    pm.test(\"emprunt référence un utilisateur existant\", function () {\r",
+                  "\r",
+                  "\r",
+                  "\r",
+                  "        pm.expect(\r",
+                  "            userIds,\r",
+                  "            `Utilisateur ${borrow.userId} introuvable`\r",
+                  "        ).to.include(borrow.userId);\r",
+                  "\r",
+                  "\r",
+                  "\r",
+                  "    });\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "//test d'intégrité référentielle : vérifier que chaque bookId d'un emprunt correspond bien à un livre existant.\r",
+                  "pm.sendRequest(\"http://localhost:3000/books\", function (err, res) {\r",
+                  "\r",
+                  "    let books = res.json();\r",
+                  "    let bookIds = books.map(book => book.id);\r",
+                  "\r",
+                  "    pm.test(\"Chaque emprunt référence un livre existant\", function () {\r",
+                  "\r",
+                  "\r",
+                  "\r",
+                  "        pm.expect(\r",
+                  "            bookIds,\r",
+                  "            `Livre ${borrow.bookId} introuvable`\r",
+                  "        ).to.include(borrow.bookId);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n        \"id\": 2,\r\n        \"userId\": 1,\r\n        \"bookId\": 1,\r\n        \"borrowDate\": \"2025-07-01\",\r\n        \"dueDate\": \"2025-07-15\",\r\n        \"returnDate\": null,\r\n        \"status\": \"borrowed\"\r\n    }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/borrows",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "borrows"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create borrow with valid date",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let borrow = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"La date d'emprunt est renseignée\", function () {\r",
+                  "    pm.expect(borrow.borrowDate).to.not.be.empty;\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "//La date d'emprunt est au format YYYY-MM-DD\r",
+                  "pm.test(\"La date d'emprunt est au format YYYY-MM-DD\", function () {\r",
+                  "\r",
+                  "    const regex = /^\\d{4}-\\d{2}-\\d{2}$/;\r",
+                  "\r",
+                  "    pm.expect(borrow.borrowDate).to.match(regex);\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "//Le format peut être correct mais la date invalide (2025-02-31).\r",
+                  "pm.test(\"La date d'emprunt est valide\", function () {\r",
+                  "\r",
+                  "    const date = new Date(borrow.borrowDate);\r",
+                  "\r",
+                  "    pm.expect(date.toString()).to.not.equal(\"Invalid Date\");\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "//Vérifier que la date n'est pas dans le futur\r",
+                  "pm.test(\"La date d'emprunt n'est pas dans le futur\", function () {\r",
+                  "\r",
+                  "    const borrowDate = new Date(borrow.borrowDate);\r",
+                  "    const today = new Date();\r",
+                  "\r",
+                  "    pm.expect(borrowDate.getTime()).to.be.at.most(today.getTime());\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "//date de retour prévue > date d'emprunt\r",
+                  "pm.test(\"La date de retour prévue est postérieure à la date d'emprunt\", function () {\r",
+                  "\r",
+                  "    const borrowDate = new Date(borrow.borrowDate);\r",
+                  "    const dueDate = new Date(borrow.dueDate);\r",
+                  "\r",
+                  "    pm.expect(dueDate.getTime()).to.be.above(borrowDate.getTime());\r",
+                  "\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n        \"id\": 2,\r\n        \"userId\": 1,\r\n        \"bookId\": 1,\r\n        \"borrowDate\": \"2025-07-01\",\r\n        \"dueDate\": \"2025-07-15\",\r\n        \"returnDate\": null,\r\n        \"status\": \"borrowed\"\r\n    }"
+            },
+            "url": {
+              "raw": "{{base_url}}/borrows",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "borrows"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

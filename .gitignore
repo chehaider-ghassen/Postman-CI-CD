@@ -1,0 +1,5 @@
+node_modules/
+newman/
+.env
+*.log
+.DS_Store

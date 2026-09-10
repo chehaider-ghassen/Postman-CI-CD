@@ -1,0 +1,85 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@library.com",
+      "password": "Admin123!",
+      "role": "admin",
+      "active": true
+    },
+    {
+      "id": 2,
+      "username": "alice",
+      "email": "alice@test.com",
+      "password": "Alice123!",
+      "role": "user",
+      "active": true
+    },
+    {
+      "id": 12,
+      "username": "ghassen",
+      "email": "ghassen.com",
+      "password": "Password123!",
+      "role": "user",
+      "active": false
+    },
+    {
+      "id": 13,
+      "username": "Ghassen",
+      "email": "1783066900177@test.com",
+      "password": "Password123!",
+      "role": "user",
+      "active": true
+    },
+    {
+      "username": "john",
+      "email": "john@test.com",
+      "password": "Password@123",
+      "role": "user",
+      "active": true,
+      "id": 10
+    }
+  ],
+  "books": [
+    {
+      "id": 1,
+      "title": "The lord of the rings",
+      "author": "chehaider ghassen",
+      "price": 150,
+      "available": false
+    },
+    {
+      "id": 2,
+      "title": "Refactoring lord",
+      "author": "Martin Fowler",
+      "price": 45,
+      "available": false
+    },
+    {
+      "id": 3,
+      "title": "Design Patterns lord",
+      "author": "GoF",
+      "price": 55,
+      "available": true
+    },
+    {
+      "id": 4,
+      "title": "The lord of the rings",
+      "author": "chehaider ghassen",
+      "price": 150,
+      "available": true
+    }
+  ],
+  "borrows": [
+    {
+      "id": 1,
+      "userId": 1,
+      "bookId": 2,
+      "borrowDate": "2025-07-01",
+      "dueDate": "2025-07-15",
+      "returnDate": null,
+      "status": "borrowed"
+    }
+  ]
+}

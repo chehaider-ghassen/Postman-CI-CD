@@ -1,0 +1,23 @@
+{
+  "name": "library-management-api",
+  "version": "1.0.0",
+  "description": "API REST mock (json-server) pour la gestion d'une bibliotheque : utilisateurs, livres, emprunts. Testee de bout en bout avec Postman/Newman.",
+  "main": "db.json",
+  "scripts": {
+    "start": "json-server --watch db.json --port 3000",
+    "test": "newman run postman/Library_Management.postman_collection.json -e postman/Library_Management.postman_environment.json --env-var base_url=http://localhost:3000"
+  },
+  "keywords": [
+    "json-server",
+    "rest-api",
+    "postman",
+    "newman",
+    "library-management"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "json-server": "^0.17.4",
+    "newman": "^6.2.1",
+    "wait-on": "^7.2.0"
+  }
+}
