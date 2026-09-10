@@ -18,7 +18,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
 
       - name: Install dependencies
         run: npm install
@@ -30,11 +29,18 @@ jobs:
         run: npx wait-on http://localhost:3000/books --timeout 30000
 
       - name: Run Postman collection with Newman
-        run: npx newman run postman/Library_Management.postman_collection.json -e postman/Library_Management.postman_environment.json --env-var base_url=http://localhost:3000 --reporters cli,junit --reporter-junit-export newman/report.xml
+        run: npx newman run postman/Library_Management.postman_collection.json -e postman/Library_Management.postman_environment.json --env-var base_url=http://localhost:3000 --reporters cli,junit,htmlextra --reporter-junit-export newman/report.xml --reporter-htmlextra-export newman/report.html
 
-      - name: Upload test report
+      - name: Upload test report (XML)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: newman-report
+          name: newman-report-xml
           path: newman/report.xml
+
+      - name: Upload test report (HTML)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-report-html
+          path: newman/report.html

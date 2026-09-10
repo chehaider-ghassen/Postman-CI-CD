@@ -18,6 +18,7 @@
   "devDependencies": {
     "json-server": "^0.17.4",
     "newman": "^6.2.1",
+    "newman-reporter-htmlextra": "^1.23.1",
     "wait-on": "^7.2.0"
   }
 }
